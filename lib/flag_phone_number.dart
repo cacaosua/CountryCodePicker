@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 export 'country_code.dart';
 
 class FlagPhoneNumber extends StatefulWidget {
-  final Function()? onTapFlag;
   final ValueChanged<CountryCode>? onChanged;
   final ValueChanged<CountryCode?>? onInit;
   final String? initialSelection;
@@ -37,7 +36,6 @@ class FlagPhoneNumber extends StatefulWidget {
 
   FlagPhoneNumber({
     // Custom Button
-    this.onTapFlag,
     this.onChanged,
     this.onInit,
     this.countryFilter,
@@ -200,7 +198,6 @@ class FlagPhoneNumberState extends State<FlagPhoneNumber> {
         ),
       ),
       onPressed: widget.disable ? null : () async {
-        widget.onTapFlag!();
         final countryCode = await BottomSheetService.show(
           context,
           isScrollControlled: true,
