@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 export 'country_code.dart';
 
 class FlagPhoneNumber extends StatefulWidget {
+  final Function()? onTapFlag;
   final ValueChanged<CountryCode>? onChanged;
   final ValueChanged<CountryCode?>? onInit;
   final String? initialSelection;
@@ -36,6 +37,7 @@ class FlagPhoneNumber extends StatefulWidget {
 
   FlagPhoneNumber({
     // Custom Button
+    this.onTapFlag,
     this.onChanged,
     this.onInit,
     this.countryFilter,
@@ -90,22 +92,14 @@ class FlagPhoneNumber extends StatefulWidget {
 }
 
 class FlagPhoneNumberState extends State<FlagPhoneNumber> {
-  final _focusNode = FocusNode();
   CountryCode? selectedItem;
   List<CountryCode> elements = [];
   List<CountryCode> favoriteElements = [];
   FlagPhoneNumberState(this.elements);
-  bool _prefixTapped = false;
-
 
   @override
   void initState() {
     super.initState();
-
-    _focusNode.addListener(() {
-    if (_focusNode.hasFocus & _prefixTapped) _focusNode.unfocus();
-    _prefixTapped = false;
-  });
 
     if (widget.initialSelection != null) {
       selectedItem = elements.firstWhere(
@@ -206,8 +200,7 @@ class FlagPhoneNumberState extends State<FlagPhoneNumber> {
         ),
       ),
       onPressed: widget.disable ? null : () async {
-        _prefixTapped = true;
-        _focusNode.unfocus();
+        widget.onTapFlag!();
         final countryCode = await BottomSheetService.show(
           context,
           isScrollControlled: true,
