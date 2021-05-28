@@ -90,14 +90,22 @@ class FlagPhoneNumber extends StatefulWidget {
 }
 
 class FlagPhoneNumberState extends State<FlagPhoneNumber> {
+  final _focusNode = FocusNode();
   CountryCode? selectedItem;
   List<CountryCode> elements = [];
   List<CountryCode> favoriteElements = [];
   FlagPhoneNumberState(this.elements);
+  bool _prefixTapped = false;
+
 
   @override
   void initState() {
     super.initState();
+
+    _focusNode.addListener(() {
+    if (_focusNode.hasFocus & _prefixTapped) _focusNode.unfocus();
+    _prefixTapped = false;
+  });
 
     if (widget.initialSelection != null) {
       selectedItem = elements.firstWhere(
@@ -198,6 +206,8 @@ class FlagPhoneNumberState extends State<FlagPhoneNumber> {
         ),
       ),
       onPressed: widget.disable ? null : () async {
+        _prefixTapped = true;
+        _focusNode.unfocus();
         final countryCode = await BottomSheetService.show(
           context,
           isScrollControlled: true,
